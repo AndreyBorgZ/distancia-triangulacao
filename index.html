@@ -17,6 +17,61 @@
             padding: 20px;
             box-sizing: border-box;
         }
+
+        /* Tela de Login */
+        .login-box {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            border-top: 5px solid #00b377;
+        }
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #00b377;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background-color: #262626;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .login-box input:focus {
+            outline: none;
+            border-color: #00b377;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00875a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background-color: #00b377;
+        }
+        .error-msg {
+            color: #dc2626;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* Container do App (Escondido por padrão) */
         .container {
             background-color: #1e1e1e;
             padding: 25px;
@@ -25,6 +80,7 @@
             width: 100%;
             max-width: 650px;
             border-top: 5px solid #00b377;
+            display: none;
         }
         h1 {
             font-size: 22px;
@@ -117,7 +173,7 @@
             gap: 10px;
             margin-bottom: 20px;
         }
-        button {
+        .btn-action {
             padding: 14px;
             border: none;
             border-radius: 8px;
@@ -177,7 +233,15 @@
 </head>
 <body>
 
-<div class="container">
+<div class="login-box" id="loginBox">
+    <h2>Acesso Restrito</h2>
+    <div class="error-msg" id="errorMsg">Usuário ou senha incorretos!</div>
+    <input type="text" id="userInput" placeholder="Usuário">
+    <input type="password" id="passInput" placeholder="Senha">
+    <button onclick="gerenciarAcesso()">Entrar</button>
+</div>
+
+<div class="container" id="appContainer">
     <h1>Distancia x Triangulação</h1>
     
     <div class="status-container">
@@ -239,8 +303,8 @@
     </div>
 
     <div class="btn-group">
-        <button class="btn-clear" onclick="limparTudo()">Limpar</button>
-        <button class="btn-calc" onclick="executarCalculos()">Calcular Alvos</button>
+        <button class="btn-action btn-clear" onclick="limparTudo()">Limpar</button>
+        <button class="btn-action btn-calc" onclick="executarCalculos()">Calcular Alvos</button>
     </div>
     
     <div class="result-box" id="resultBox">
@@ -253,7 +317,7 @@
             <div class="result-title">Cruzamento com sua tabela de dados:</div>
             <div class="grid-targets">
                 <div class="target-card">
-                    <div style="font-size: 12px; color: #aaa;">制造 Vizinho Horário</div>
+                    <div style="font-size: 12px; color: #aaa;">↻ Vizinho Horário</div>
                     <div class="result-value" id="targetHorario" style="color: #00b377; margin: 4px 0;">-</div>
                     <div style="font-size: 11px; color: #888;">Números a Mostrar:</div>
                     <div class="meta-value" id="metaHorario">-</div>
@@ -270,6 +334,43 @@
 </div>
 
 <script>
+    // 🔒 CREDENCIAIS PROTEGIDAS VIA HASH (SHA-256)
+    // Quem olhar o código verá apenas estas assinaturas embaralhadas
+    const HASH_USER_ALVO = "3bcbc698c474d28d095908b879ecfb5f162468307db81cfc68612ca492215c0e"; // "cassino"
+    const HASH_PASS_ALVO = "9f7ec9da73273b5bf5991f630b1e427d11f67f0367e91d830f576ff9d98b584d"; // "C4ss1n0777"
+
+    // Função auxiliar nativa do navegador para calcular hashes criptográficos
+    async function calcularSHA256(texto) {
+        const msgBuffer = new TextEncoder().encode(texto);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function gerenciarAcesso() {
+        const user = document.getElementById('userInput').value;
+        const pass = document.getElementById('passInput').value;
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Calcula os hashes das entradas fornecidas pelo usuário
+        const hashUserDigitado = await calcularSHA256(user);
+        const hashPassDigitado = await calcularSHA256(pass);
+
+        if (hashUserDigitado === HASH_USER_ALVO && hashPassDigitado === HASH_PASS_ALVO) {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            sessionStorage.setItem("acesso_liberado", "true");
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    }
+
+    if (sessionStorage.getItem("acesso_liberado") === "true") {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('appContainer').style.display = 'block';
+    }
+
+    // --- LÓGICA CORE DO APP ---
     let numA = null, numB = null, numProj = null;
     let focoAtual = 'A';
 
@@ -323,7 +424,7 @@
         setFoco('A');
     }
 
-    function ejecutarCalculos() {
+    function executarCalculos() {
         if (numA === null || numB === null || numProj === null) {
             alert("Por favor, selecione os três números no painel antes de calcular!");
             return;
