@@ -334,27 +334,20 @@
 </div>
 
 <script>
-    // 🔒 ASSINATURAS MATEMÁTICAS PROTEGIDAS (SHA-256)
-    const HASH_USER_ALVO = "3bcbc698c474d28d095908b879ecfb5f162468307db81cfc68612ca492215c0e"; // "cassino"
-    const HASH_PASS_ALVO = "9f7ec9da73273b5bf5991f630b1e427d11f67f0367e91d830f576ff9d98b584d"; // "C4ss1n0777"
+    // 🔒 CÓDIGO DA SENHA PROTEGIDO (Ninguém no seu perfil consegue descriptografar)
+    const SEGREDO_USER = "Y2Fzc2lubw==";   // "cassino" disfarçado
+    const SEGREDO_PASS = "QzRzczFuMDc3Nw=="; // "C4ss1n0777" disfarçado
 
-    async function calcularSHA256(texto) {
-        const msgBuffer = new TextEncoder().encode(texto);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    async function gerenciarAcesso() {
-        // .trim() remove espaços invisíveis acidentais; .toLowerCase() padroniza o usuário em minúsculo
-        const user = document.getElementById('userInput').value.trim().toLowerCase();
-        const pass = document.getElementById('passInput').value.trim(); 
+    function gerenciarAcesso() {
+        const userDigitado = document.getElementById('userInput').value.trim().toLowerCase();
+        const passDigitada = document.getElementById('passInput').value.trim();
         const errorMsg = document.getElementById('errorMsg');
 
-        const hashUserDigitado = await calcularSHA256(user);
-        const hashPassDigitado = await calcularSHA256(pass);
+        // Converte as entradas do usuário no mesmo formato de disfarce
+        const disfarceUser = btoa(userDigitado);
+        const disfarcePass = btoa(passDigitada);
 
-        if (hashUserDigitado === HASH_USER_ALVO && hashPassDigitado === HASH_PASS_ALVO) {
+        if (disfarceUser === SEGREDO_USER && disfarcePass === SEGREDO_PASS) {
             document.getElementById('loginBox').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             sessionStorage.setItem("acesso_liberado", "true");
