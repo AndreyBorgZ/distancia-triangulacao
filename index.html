@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distancia x Triangulação</title>
+    <title>Distancia x Triangulação Pro</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
+            background-color: #0f111a;
             color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
 
         /* Tela de Login */
         .login-box {
-            background-color: #1e1e1e;
+            background-color: #1a1d29;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
             width: 100%;
             max-width: 360px;
             text-align: center;
@@ -34,14 +34,15 @@
             color: #00b377;
             font-size: 20px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .login-box input {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
             border-radius: 6px;
-            border: 1px solid #333;
-            background-color: #262626;
+            border: 1px solid #2a2f45;
+            background-color: #121420;
             color: white;
             font-size: 16px;
             box-sizing: border-box;
@@ -65,7 +66,7 @@
             background-color: #00b377;
         }
         .error-msg {
-            color: #dc2626;
+            color: #ff4d4d;
             font-size: 14px;
             margin-bottom: 10px;
             display: none;
@@ -73,17 +74,17 @@
 
         /* Container do App */
         .container {
-            background-color: #1e1e1e;
-            padding: 25px;
+            background-color: #1a1d29;
+            padding: 20px;
             border-radius: 16px;
             box-shadow: 0 12px 32px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 650px;
+            max-width: 800px;
             border-top: 5px solid #00b377;
             display: none;
         }
         h1 {
-            font-size: 22px;
+            font-size: 20px;
             margin-bottom: 15px;
             color: #00b377;
             text-align: center;
@@ -91,143 +92,162 @@
             letter-spacing: 1px;
         }
         
-        /* Status dos Inputs Selecionados */
+        /* Status dos Inputs */
         .status-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
-            margin-bottom: 20px;
-            background-color: #151515;
-            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #0f111a;
+            padding: 10px;
             border-radius: 8px;
-            border: 1px solid #333;
         }
         .status-box {
             text-align: center;
             padding: 8px;
             border-radius: 6px;
-            background-color: #262626;
+            background-color: #1f2336;
             border: 2px solid transparent;
-            transition: all 0.2s;
+            cursor: pointer;
         }
         .status-box.active {
             border-color: #ffcc00;
-            background-color: #332a00;
+            background-color: #2d2a15;
         }
         .status-label {
             font-size: 11px;
             color: #aaa;
             text-transform: uppercase;
-            margin-bottom: 4px;
         }
         .status-value {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            color: #fff;
         }
 
-        /* Layout do Pano da Roleta */
+        /* Pano da Roleta Grid */
         .roulette-board {
             display: grid;
-            grid-template-columns: 60px repeat(12, 1fr);
-            gap: 4px;
-            background-color: #052e16;
-            padding: 12px;
+            grid-template-columns: 50px repeat(12, 1fr);
+            gap: 3px;
+            background-color: #062613;
+            padding: 10px;
             border-radius: 8px;
             overflow-x: auto;
-            border: 2px solid #0f5132;
+            border: 2px solid #0b4022;
             margin-bottom: 15px;
         }
         .cell {
-            height: 50px;
+            height: 45px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             border-radius: 4px;
             cursor: pointer;
             user-select: none;
-            transition: transform 0.1s, filter 0.2s;
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
         }
-        .cell:hover {
-            transform: scale(1.05);
-            filter: brightness(1.3);
-        }
-        .cell:active {
-            transform: scale(0.95);
-        }
-        .zero {
-            grid-row: span 3;
-            background-color: #00b377;
-            color: white;
-        }
+        .zero { grid-row: span 3; background-color: #00b377; color: white; }
         .red { background-color: #dc2626; color: white; }
         .black { background-color: #171717; color: white; border: 1px solid #333; }
 
-        /* Botões de Ação */
+        /* Botões */
         .btn-group {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .btn-action {
-            padding: 14px;
+            padding: 12px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
         }
         .btn-clear { background-color: #3f3f46; color: white; }
-        .btn-clear:hover { background-color: #52525b; }
         .btn-calc { background-color: #00875a; color: white; }
-        .btn-calc:hover { background-color: #00b377; }
 
         /* Painel de Resultados */
         .result-box {
-            padding: 15px;
-            background-color: #151515;
+            padding: 20px;
+            background-color: #0f111a;
             border-radius: 10px;
             display: none;
-            border: 1px solid #333;
+            border: 1px solid #2a2f45;
         }
-        .result-title {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 3px;
+
+        /* ÁREA DE ENQUADRAMENTO */
+        .cylinder-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            box-sizing: border-box;
         }
-        .result-value {
-            font-size: 22px;
+        
+        .track-scroller {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+        }
+
+        /* Pista Única Ampliada */
+        .oval-track {
+            position: relative;
+            width: 660px;
+            height: 240px;
+            border-radius: 120px; 
+            background-color: #1c1f30;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        
+        /* Slots Numéricos Ampliados e com Ótimo Espaçamento */
+        .track-slot {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-weight: bold;
+            font-size: 14px;
+            border-radius: 50%;
+            color: #fff;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+            user-select: none;
+            box-sizing: border-box;
         }
-        .highlight { color: #ffcc00; }
-        .grid-targets {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 12px;
+
+        /* 🟢 Alvo Horário */
+        .track-slot.horario-active {
+            outline: 3.5px solid #00ffaa;
+            background-color: #004d33 !important;
+            box-shadow: 0 0 22px #00ffaa;
+            z-index: 5;
         }
-        .target-card {
-            background-color: #222;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #333;
+        
+        /* 🔴 Alvo Anti-Horário */
+        .track-slot.anti-active {
+            outline: 3.5px solid #ff4d4d;
+            background-color: #4d0000 !important;
+            box-shadow: 0 0 22px #ff4d4d;
+            z-index: 5;
         }
-        .meta-value {
-            margin-top: 8px;
-            font-size: 18px;
-            color: #ffcc00;
-            background-color: #121212;
-            padding: 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            border: 1px solid #444;
+
+        /* 🟡 Cruzamentos do CSV */
+        .track-slot.cobertura-ativa {
+            outline: 3px solid #ffcc00;
+            background-color: #594400 !important;
+            box-shadow: 0 0 14px #ffcc00;
+            z-index: 4;
         }
     </style>
 </head>
@@ -242,7 +262,7 @@
 </div>
 
 <div class="container" id="appContainer">
-    <h1>Distancia x Triangulação</h1>
+    <h1>Distancia x Triangulação Pro</h1>
     
     <div class="status-container">
         <div class="status-box active" id="boxA" onclick="setFoco('A')">
@@ -261,7 +281,6 @@
 
     <div class="roulette-board">
         <div class="cell zero" onclick="selecionarNumero(0)">0</div>
-        
         <div class="cell red" onclick="selecionarNumero(3)">3</div>
         <div class="cell black" onclick="selecionarNumero(6)">6</div>
         <div class="cell red" onclick="selecionarNumero(9)">9</div>
@@ -274,7 +293,6 @@
         <div class="cell red" onclick="selecionarNumero(30)">30</div>
         <div class="cell black" onclick="selecionarNumero(33)">33</div>
         <div class="cell red" onclick="selecionarNumero(36)">36</div>
-
         <div class="cell black" style="grid-column: 2;" onclick="selecionarNumero(2)">2</div>
         <div class="cell red" onclick="selecionarNumero(5)">5</div>
         <div class="cell black" onclick="selecionarNumero(8)">8</div>
@@ -287,7 +305,6 @@
         <div class="cell black" onclick="selecionarNumero(29)">29</div>
         <div class="cell red" onclick="selecionarNumero(32)">32</div>
         <div class="cell black" onclick="selecionarNumero(35)">35</div>
-
         <div class="cell red" style="grid-column: 2;" onclick="selecionarNumero(1)">1</div>
         <div class="cell black" onclick="selecionarNumero(4)">4</div>
         <div class="cell red" onclick="selecionarNumero(7)">7</div>
@@ -304,50 +321,29 @@
 
     <div class="btn-group">
         <button class="btn-action btn-clear" onclick="limparTudo()">Limpar</button>
-        <button class="btn-action btn-calc" onclick="executarCalculos()">Calcular Alvos</button>
+        <button class="btn-action btn-calc" onclick="executarCalculos()">Calcular Cruzamento</button>
     </div>
     
     <div class="result-box" id="resultBox">
-        <div style="margin-bottom: 12px;">
-            <div class="result-title">Menor Distância no Cilindro:</div>
-            <div class="result-value highlight" id="distanciaResultado">-</div>
-        </div>
-        
-        <div>
-            <div class="result-title">Cruzamento com sua tabela de dados:</div>
-            <div class="grid-targets">
-                <div class="target-card">
-                    <div style="font-size: 12px; color: #aaa;">↻ Vizinho Horário</div>
-                    <div class="result-value" id="targetHorario" style="color: #00b377; margin: 4px 0;">-</div>
-                    <div style="font-size: 11px; color: #888;">Números a Mostrar:</div>
-                    <div class="meta-value" id="metaHorario">-</div>
-                </div>
-                <div class="target-card">
-                    <div style="font-size: 12px; color: #aaa;">↺ Vizinho Anti-Horário</div>
-                    <div class="result-value" id="targetAntiHorario" style="color: #ff4d4d; margin: 4px 0;">-</div>
-                    <div style="font-size: 11px; color: #888;">Números a Mostrar:</div>
-                    <div class="meta-value" id="metaAntiHorario">-</div>
-                </div>
+        <div class="cylinder-wrapper">
+            <div class="track-scroller">
+                <div class="oval-track" id="ovalTrack">
+                    </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // 🔒 CÓDIGO DA SENHA PROTEGIDO (Ninguém no seu perfil consegue descriptografar)
-    const SEGREDO_USER = "Y2Fzc2lubw==";   // "cassino" disfarçado
-    const SEGREDO_PASS = "QzRzczFuMDc3Nw=="; // "C4ss1n0777" disfarçado
+    const SEGREDO_USER = "Y2Fzc2lubw==";   
+    const SEGREDO_PASS = "QzRzczFuMDc3Nw=="; 
 
     function gerenciarAcesso() {
         const userDigitado = document.getElementById('userInput').value.trim().toLowerCase();
         const passDigitada = document.getElementById('passInput').value.trim();
         const errorMsg = document.getElementById('errorMsg');
 
-        // Converte as entradas do usuário no mesmo formato de disfarce
-        const disfarceUser = btoa(userDigitado);
-        const disfarcePass = btoa(passDigitada);
-
-        if (disfarceUser === SEGREDO_USER && disfarcePass === SEGREDO_PASS) {
+        if (btoa(userDigitado) === SEGREDO_USER && btoa(passDigitada) === SEGREDO_PASS) {
             document.getElementById('loginBox').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             sessionStorage.setItem("acesso_liberado", "true");
@@ -361,23 +357,31 @@
         document.getElementById('appContainer').style.display = 'block';
     }
 
-    // --- LÓGICA DO PAINEL ---
     let numA = null, numB = null, numProj = null;
     let focoAtual = 'A';
 
+    // Sequência oficial e intacta
     const roletaModoPrato = [
         0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 
         24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
     ];
-    const totalPosicoes = 37;
 
-    const dadosPlanilha = {
-        0: "Sem dados", 1: "27 - 3", 2: "29 - 10", 3: "1 - 27", 4: "22 - 8", 5: "25 - 7",
-        6: "33 - 35", 7: "25 - 5", 8: "22 - 4", 9: "19 - 30", 10: "2 - 29", 11: "31 - 15",
-        12: "34 - 16", 13: "20 - 26", 14: "36 - 32", 15: "31 - 11", 16: "34 -12", 17: "28 - 24",
-        18: "23 - 21", 19: "9 - 30", 20: "13 - 0", 21: "18 - 23", 22: "4 - 8", 23: "18 - 21",
-        24: "17 - 28", 25: "7 - 5", 26: "20 - 13", 27: "1 - 3", 28: "17 - 24", 29: "2 - 10",
-        30: "9 - 19", 31: "11 - 15", 32: "14 - 36", 33: "6 - 35", 34: "12 - 16", 35: "6 - 33", 36: "14 - 32"
+    const vermelhos = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+
+    const planilhaPlanificada = {
+        0: { colA: null, colB: null },
+        1: { colA: 27, colB: 3 },      2: { colA: 29, colB: 10 },    3: { colA: 1, colB: 27 },
+        4: { colA: 22, colB: 8 },      5: { colA: 25, colB: 7 },     6: { colA: 33, colB: 35 },
+        7: { colA: 25, colB: 5 },      8: { colA: 22, colB: 4 },     9: { colA: 19, colB: 30 },
+        10: { colA: 2, colB: 29 },     11: { colA: 31, colB: 15 },   12: { colA: 34, colB: 16 },
+        13: { colA: 20, colB: 26 },    14: { colA: 36, colB: 32 },   15: { colA: 31, colB: 11 },
+        16: { colA: 34, colB: 12 },    17: { colA: 28, colB: 24 },   18: { colA: 23, colB: 21 },
+        19: { colA: 9, colB: 30 },     20: { colA: 13, colB: 0 },    21: { colA: 18, colB: 23 },
+        22: { colA: 4, colB: 8 },      23: { colA: 18, colB: 21 },   24: { colA: 17, colB: 28 },
+        25: { colA: 7, colB: 5 },      26: { colA: 20, colB: 13 },   27: { colA: 1, colB: 3 },
+        28: { colA: 17, colB: 24 },    29: { colA: 2, colB: 10 },    30: { colA: 9, colB: 19 },
+        31: { colA: 11, colB: 15 },    32: { colA: 14, colB: 36 },   33: { colA: 6, colB: 35 },
+        34: { colA: 12, colB: 16 },    35: { colA: 6, colB: 33 },    36: { colA: 14, colB: 32 }
     };
 
     function setFoco(campo) {
@@ -385,25 +389,13 @@
         document.getElementById('boxA').classList.remove('active');
         document.getElementById('boxB').classList.remove('active');
         document.getElementById('boxProj').classList.remove('active');
-        
-        if(campo === 'A') document.getElementById('boxA').classList.add('active');
-        if(campo === 'B') document.getElementById('boxB').classList.add('active');
-        if(campo === 'Proj') document.getElementById('boxProj').classList.add('active');
+        document.getElementById('box' + campo).classList.add('active');
     }
 
     function selecionarNumero(num) {
-        if (focoAtual === 'A') {
-            numA = num;
-            document.getElementById('valA').innerText = num;
-            setFoco('B');
-        } else if (focoAtual === 'B') {
-            numB = num;
-            document.getElementById('valB').innerText = num;
-            setFoco('Proj');
-        } else if (focoAtual === 'Proj') {
-            numProj = num;
-            document.getElementById('valProj').innerText = num;
-        }
+        if (focoAtual === 'A') { numA = num; document.getElementById('valA').innerText = num; setFoco('B'); }
+        else if (focoAtual === 'B') { numB = num; document.getElementById('valB').innerText = num; setFoco('Proj'); }
+        else if (focoAtual === 'Proj') { numProj = num; document.getElementById('valProj').innerText = num; }
     }
 
     function limparTudo() {
@@ -417,35 +409,104 @@
 
     function executarCalculos() {
         if (numA === null || numB === null || numProj === null) {
-            alert("Por favor, selecione os três números no painel antes de calcular!");
+            alert("Selecione os três números primeiro!");
             return;
         }
         
         const idx1 = roletaModoPrato.indexOf(numA);
         const idx2 = roletaModoPrato.indexOf(numB);
         const distDireta = Math.abs(idx1 - idx2);
-        const distVolta = totalPosicoes - distDireta;
-        const menorDistancia = Math.min(distDireta, distVolta);
+        const menorDistancia = Math.min(distDireta, 37 - distDireta);
         
         const idxProjecao = roletaModoPrato.indexOf(numProj);
         
-        let idxHorario = (idxProjecao + menorDistancia) % totalPosicoes;
+        let idxHorario = (idxProjecao + menorDistancia) % 37;
         const numHorario = roletaModoPrato[idxHorario];
         
-        let idxAntiHorario = (idxProjecao - menorDistancia) % totalPosicoes;
-        if (idxAntiHorario < 0) idxAntiHorario += totalPosicoes;
+        let idxAntiHorario = (idxProjecao - menorDistancia) % 37;
+        if (idxAntiHorario < 0) idxAntiHorario += 37;
         const numAntiHorario = roletaModoPrato[idxAntiHorario];
         
-        const valorPlanilhaHorario = dadosPlanilha[numHorario] || "Sem dados";
-        const valorPlanilhaAntiHorario = dadosPlanilha[numAntiHorario] || "Sem dados";
-        
-        document.getElementById('distanciaResultado').innerText = `${menorDistancia} ${menorDistancia === 1 ? 'casa' : 'casas'}`;
-        document.getElementById('targetHorario').innerText = numHorario;
-        document.getElementById('metaHorario').innerText = valorPlanilhaHorario;
-        document.getElementById('targetAntiHorario').innerText = numAntiHorario;
-        document.getElementById('metaAntiHorario').innerText = valorPlanilhaAntiHorario;
-        
+        desenharCilindroOval(numHorario, numAntiHorario);
         document.getElementById('resultBox').style.display = 'block';
+    }
+
+    function desenharCilindroOval(targetH, targetA) {
+        const track = document.getElementById('ovalTrack');
+        track.innerHTML = ''; 
+
+        // Dimensões do layout elíptico estádio
+        const L = 460;  
+        const R = 64;   
+        
+        const semicircunferencia = Math.PI * R;
+        const perimetroTotal = (2 * L) + (2 * semicircunferencia);
+        const espacamentoCasas = perimetroTotal / 37;
+
+        // Margens estruturais do contêiner
+        const offsetX = (660 - L - (2 * R)) / 2 + R;
+        const offsetY = (240 - (2 * R)) / 2;
+
+        const cobHA = planilhaPlanificada[targetH]?.colA;
+        const cobHB = planilhaPlanificada[targetH]?.colB;
+        const cobAA = planilhaPlanificada[targetA]?.colA;
+        const cobAB = planilhaPlanificada[targetA]?.colB;
+
+        const listaCoberturas = [Number(cobHA), Number(cobHB), Number(cobAA), Number(cobAB)].filter(n => !isNaN(n) && n !== null);
+
+        // AJUSTE DE POSIÇÃO EXTRA (Deslocamento de 5 casas no sentido horário a partir da referência base anterior)
+        const deslocamentoVisual = (2 * L + 2 * semicircunferencia) - (L + semicircunferencia + (L / 2)) + (5 * espacamentoCasas);
+
+        roletaModoPrato.forEach((num, index) => {
+            let d = (index * espacamentoCasas + deslocamentoVisual) % perimetroTotal;
+            if (d < 0) d += perimetroTotal;
+
+            let posX = 0;
+            let posY = 0;
+
+            if (d <= L) {
+                // Linha Reta Superior
+                posX = offsetX + d;
+                posY = offsetY;
+            } else if (d <= L + semicircunferencia) {
+                // Arco da Curva Direita
+                const angulo = ((d - L) / semicircunferencia) * Math.PI - Math.PI / 2;
+                posX = offsetX + L + R * Math.cos(angulo);
+                posY = offsetY + R + R * Math.sin(angulo);
+            } else if (d <= (2 * L) + semicircunferencia) {
+                // Linha Reta Inferior
+                posX = offsetX + L - (d - L - semicircunferencia);
+                posY = offsetY + (2 * R);
+            } else {
+                // Arco da Curva Esquerda
+                const angulo = ((d - (2 * L) - semicircunferencia) / semicircunferencia) * Math.PI + Math.PI / 2;
+                posX = offsetX + R * Math.cos(angulo);
+                posY = offsetY + R + R * Math.sin(angulo);
+            }
+
+            const slot = document.createElement('div');
+            slot.classList.add('track-slot');
+            slot.innerText = num;
+            
+            slot.style.left = `${posX}px`;
+            slot.style.top = `${posY}px`;
+
+            // Tratamento das Cores
+            if (num === 0) slot.style.backgroundColor = '#00b377';
+            else if (vermelhos.includes(num)) slot.style.backgroundColor = '#dc2626';
+            else slot.style.backgroundColor = '#171717';
+
+            // Alvos Encontrados e Projeções Secundárias
+            if (num === targetH) {
+                slot.classList.add('horario-active');
+            } else if (num === targetA) {
+                slot.classList.add('anti-active');
+            } else if (listaCoberturas.includes(num)) {
+                slot.classList.add('cobertura-ativa');
+            }
+
+            track.appendChild(slot);
+        });
     }
 </script>
 
